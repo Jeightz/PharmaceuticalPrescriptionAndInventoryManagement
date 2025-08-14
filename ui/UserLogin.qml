@@ -6,6 +6,19 @@ Rectangle {
     width: 700
     height: 500
 
+    Connections {
+        target: userlogincontroller
+        function onLogin_success(message) {
+            console.log("Login success:", message)
+            // Handle navigation here
+            stackView.push("Dashboard.qml")
+        }
+        function onLogin_failed(error) {
+            console.log("Login failed:", error)
+            errorText.text = error
+            errorText.visible = true
+        }
+    }
     Rectangle {
         id: panelloginholder
         x: 0
@@ -40,9 +53,10 @@ Rectangle {
             onMousePressed: console.log("Mouse pressed")
             onMouseReleased: console.log("Mouse released")
             onMouseClicked: {
-                var username = usernameinput.placeholderText;
-                var password = passwordinput.placeholderText;
-                
+                var username = usernameinput.textchange;
+                var password = passwordinput.textchange;
+                console.log(username);
+                userlogincontroller.login(username,password);
             }
         }
     }

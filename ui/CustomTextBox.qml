@@ -16,7 +16,7 @@ Rectangle {
     property color focusedBorderColor: "green"
     property color hoverBorderColor: "blue"
     property color pressedBorderColor: "darkblue"
-
+    property string textchange : ""
     signal clicked()
     signal pressed()
     signal released()
@@ -25,6 +25,7 @@ Rectangle {
     signal textChanged(string text)
     signal focusChanged(bool focused)
     signal returnPressed()
+    
 
     Text {
         id: placeholder
@@ -48,7 +49,10 @@ Rectangle {
         echoMode: root.isPassword ? TextInput.Password : TextInput.Normal
         selectByMouse: true
 
-        onTextChanged: root.textChanged(text)
+        onTextChanged:{
+            root.textchange = text;
+            root.textChanged(text);
+        }
         onActiveFocusChanged: root.focusChanged(activeFocus)
         onAccepted: root.returnPressed()
     }

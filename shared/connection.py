@@ -1,17 +1,21 @@
 import mysql.connector
-
+from dotenv import load_dotenv 
+import os
 
 class create_connection:
-    def __init__(self, host, user, password, database):
-        self.host = host
-        self.user = user
-        self.password = password
-        self.database = database
+    def __init__(self):
+        self.host = os.getenv("DB_HOST")
+        self.user = os.getenv("DB_USER")
+        self.password = os.getenv("DB_PASSWORD")
+        self.database = os.getenv("DB_NAME")
         self.connection = None
+        
     def start_connection(self):
-        self
-        return self._connect()
-    
+        if not self.connection or not self.connection.is_connected():
+            self.connection = self._connect()
+        return self.connection
+
+        
     def close_connection(self,exc_type,exc_value,exc_traceback):
         if exc_type:
             print(f"Error type: {exc_type}")    

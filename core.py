@@ -1,16 +1,16 @@
 from PySide6.QtWidgets import QApplication
 from PySide6.QtQml import QQmlApplicationEngine
-from userlogin.model.Button import Button
+from userlogin.userlogin_controller import UserLoginController 
 def core():
 
     app = QApplication([])
     engine = QQmlApplicationEngine()
-    button = Button() 
-    engine.rootContext().setContextProperty("loginButton", button)
+    controller = UserLoginController()
+    engine.rootContext().setContextProperty("userlogincontroller", controller)
     engine.load("PharmaceuticalPrescriptionAndInventoryManagement/ui/WindowFrame.qml")
 
     if not engine.rootObjects():
-        print("ERROR: Failed to load QML file!")
+        print("ERROR: Failed to load QML file!")    
         return -1
         
     app.exec()
