@@ -31,7 +31,7 @@ class create_connection:
 
     def _connect(self):
         try:
-          
+            
             con = mysql.connector.connect(
                 host=self.host,
                 user=self.user,

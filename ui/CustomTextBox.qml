@@ -22,10 +22,9 @@ Rectangle {
     signal released()
     signal entered()
     signal exited()
-    signal textChanged(string text)
+    signal customtextChanged(string text)
     signal focusChanged(bool focused)
     signal returnPressed()
-    
 
     Text {
         id: placeholder
@@ -36,30 +35,54 @@ Rectangle {
         font.pixelSize: 12
         verticalAlignment: Text.AlignVCenter
         visible: txtInput.text === ""
+        elide: Text.ElideRight
     }
 
-    TextInput {
-        id: txtInput
+    Flickable {
+        id: flick
         anchors.fill: parent
         anchors.margins: 8
         anchors.rightMargin: root.isPassword ? 30 : 8
-        color: "black"
-        font.pixelSize: 12
-        verticalAlignment: TextInput.AlignVCenter
-        echoMode: root.isPassword ? TextInput.Password : TextInput.Normal
-        selectByMouse: true
+        clip: true
+        contentWidth: txtInput.contentWidth
+        contentHeight: height
+        interactive: false  // Disable user scrolling, just for clipping
 
-        onTextChanged:{
-            root.textchange = text;
-            root.textChanged(text);
+        function ensureVisible(r) {
+            if (contentX >= r.x)
+                contentX = r.x;
+            else if (contentX+width <= r.x+r.width)
+                contentX = r.x+r.width-width;
         }
-        onActiveFocusChanged: root.focusChanged(activeFocus)
-        onAccepted: root.returnPressed()
+
+        TextInput {
+            id: txtInput
+            width: Math.max(flick.width, contentWidth)
+            height: flick.height
+            color: "black"
+            font.pixelSize: 12
+            verticalAlignment: TextInput.AlignVCenter
+            echoMode: root.isPassword ? TextInput.Password : TextInput.Normal
+            selectByMouse: true
+
+            onTextChanged: {
+                root.textchange = text;
+                root.customtextChanged(text);
+                flick.contentX = Math.max(0, contentWidth - flick.width)
+            }
+            onCursorRectangleChanged: flick.ensureVisible(cursorRectangle)
+            onActiveFocusChanged: {
+                root.focusChanged(activeFocus)
+                if (activeFocus) {
+                    flick.contentX = Math.max(0, contentWidth - flick.width)
+                }
+            }
+            onAccepted: root.returnPressed()
+        }
     }
 
     CheckBox {
         id: visibilityCheckbox
-
         anchors {
             right: parent.right
             verticalCenter: parent.verticalCenter
@@ -85,6 +108,10 @@ Rectangle {
         }
         ToolTip.visible: hovered
         ToolTip.text: checked ? "Hide password" : "Show password"
+        
+        onCheckedChanged: {
+            txtInput.echoMode = checked ? TextInput.Normal : TextInput.Password
+        }
     }
 
     MouseArea {

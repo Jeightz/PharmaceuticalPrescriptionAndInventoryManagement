@@ -2,15 +2,16 @@ import shared.connection as connection
 from datetime import datetime,timedelta
 
 con = connection.create_connection()
-conn = con.start_connection()
+
 
 class UserLoginDAO:
     def login_authentication(username, password):
+        conn = con.start_connection()
         cursor = conn.cursor()
-        query = "SELECT * FROM users WHERE username = %s"
+        query = "SELECT * FROM login_info WHERE username = %s"
         cursor.execute(query, (username, ))
         user = cursor.fetchone()
-        
+            
         if not user or user['password'] != password:    
             cursor.close()
             conn.close()

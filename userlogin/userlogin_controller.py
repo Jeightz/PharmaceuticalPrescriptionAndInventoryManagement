@@ -1,5 +1,5 @@
 from PySide6.QtCore import QObject, Signal, Slot
-from .userlogin_Model import checkDataInputed as check
+from .userlogin_Model import checkDataInputed 
 from .userlogin_DAO import UserLoginDAO as DAO  
 class UserLoginController(QObject):
     login_success = Signal(str)
@@ -11,7 +11,7 @@ class UserLoginController(QObject):
         self._password = ""
 
 
-    @Slot()
+    @Slot(str, str)
     def login(self,username,password):
         self._username = username
         self._password = password
@@ -26,4 +26,4 @@ class UserLoginController(QObject):
 
         
     def _authenticate(self):
-        check.checkDataInputed(self._username, self._password)
+        return checkDataInputed(self._username, self._password)
