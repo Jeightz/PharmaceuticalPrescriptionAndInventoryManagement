@@ -1,8 +1,8 @@
-import shared.connection as con
+import shared.connection as connection
 from datetime import datetime,timedelta
 
+con = connection.create_connection()
 conn = con.start_connection()
-
 
 class UserLoginDAO:
     def login_authentication(username, password):
