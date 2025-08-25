@@ -55,7 +55,7 @@ Rectangle {
             onMouseClicked: {
                 var username = usernameinput.textchange;
                 var password = passwordinput.textchange;
-                userlogincontroller.login(username,password);
+                userlogincontroller.request_login(username,password);
             }
         }
     }

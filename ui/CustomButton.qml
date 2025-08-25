@@ -29,7 +29,7 @@ Button {
         verticalAlignment: Text.AlignVCenter
         font.pixelSize: 14
         font.bold: true
-    }
+    }   
 
     background: Rectangle {
         id: bg

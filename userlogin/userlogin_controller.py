@@ -12,7 +12,7 @@ class UserLoginController(QObject):
 
 
     @Slot(str, str)
-    def login(self,username,password):
+    def request_login(self,username,password):
         self._username = username
         self._password = password
         
